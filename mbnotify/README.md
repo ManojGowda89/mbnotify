@@ -1,56 +1,38 @@
----
-
-# MBNotify
-
-Simple **MQTT based push notification system** for Web apps.
-
-MBNotify allows you to send push notifications to web browsers using **MQTT broker (HiveMQ by default)**.
-
-It consists of two packages:
-
-* **mbnotify** → Server-side package (send notifications)
-* **mbnotify-web** → Client-side package (receive notifications)
 
 ---
 
-# Architecture
+# 🚀 MBNotify
 
-```
-Server (Node.js)
-      │
-      │ sendNotification()
-      ▼
-MQTT Broker (HiveMQ)
-      │
-      │ topic:
-/{appName}/{deviceToken}/notification
-      ▼
-Browser (mbnotify-web)
-      │
-      ▼
-Notification API
-```
+A simple **foreground push notification system** for Web & Mobile apps built using the **MQTT protocol** with the **HiveMQ public broker**.
 
 ---
 
-# Packages
+## 📦 Packages
 
-| Package        | Purpose                          |
-| -------------- | -------------------------------- |
-| `mbnotify`     | Send notifications from backend  |
-| `mbnotify-web` | Receive notifications in browser |
+| Package        | Purpose                        |
+| -------------- | ------------------------------ |
+| `mbnotify`     | Send notifications (Server)    |
+| `mbnotify-app` | Receive notifications (Mobile) |
+| `mbnotify-web` | Receive notifications (Web)    |
 
 ---
 
-# Installation
+## 📥 Installation
 
-## Server
+### Server
 
 ```bash
 npm install mbnotify
 ```
 
-## Client
+### Mobile (Expo / React Native)
+
+```bash
+npm install mbnotify-app
+npx expo install expo-notifications
+```
+
+### Web
 
 ```bash
 npm install mbnotify-web
@@ -58,14 +40,14 @@ npm install mbnotify-web
 
 ---
 
-# Server Usage (mbnotify)
+## ⚡ Send Notification (Server)
 
 ```js
 import { sendNotification } from "mbnotify";
 
 await sendNotification({
   appName: "myapp",
-  token: "dev_x8sze8zczlcmmt1s1wm",
+  token: "dev_xxxxxxxxx",
 
   title: "Order Shipped 🚚",
   body: "Your order has been shipped!",
@@ -79,227 +61,98 @@ await sendNotification({
     orderId: "12345"
   }
 });
-
-console.log("Notification sent");
 ```
 
 ---
 
-# Notification Payload
+## 📱 Mobile Usage (Expo)
 
-| Field     | Type   | Description                      |
-| --------- | ------ | -------------------------------- |
-| `appName` | string | App name used as topic namespace |
-| `token`   | string | Device token                     |
-| `title`   | string | Notification title               |
-| `body`    | string | Notification message             |
-| `icon`    | string | Notification icon                |
-| `image`   | string | Notification image               |
-| `url`     | string | URL opened when clicked          |
-| `data`    | object | Custom payload                   |
-
----
-
-# Client Usage (mbnotify-web)
-
-Example React integration.
-
-```jsx
-import { useEffect, useState } from "react";
-import { requestPermission, getToken } from "mbnotify-web";
+```js
+import { useEffect } from "react";
+import { requestPermission, getToken } from "mbnotify-app";
 
 export default function App() {
 
-  const [permission, setPermission] = useState("default");
-  const [token, setToken] = useState("");
+  useEffect(() => {
+    async function init() {
 
-  async function initNotifications() {
+      const granted = await requestPermission();
+      if (!granted) return;
 
-    try {
-
-      if (!("Notification" in window)) {
-        throw new Error("Browser does not support notifications");
-      }
-
-      const perm = await requestPermission();
-
-      setPermission(perm);
-
-      if (perm !== "granted") {
-        alert("Notification permission denied");
-        return;
-      }
-
-      const deviceToken = await getToken("myapp");
-
-      setToken(deviceToken);
-
-      console.log("Device Token:", deviceToken);
-
-    } catch (err) {
-      console.error(err);
+      const token = await getToken("myapp");
+      console.log("Device Token:", token);
     }
 
-  }
-
-  useEffect(() => {
-    initNotifications();
+    init();
   }, []);
 
-  return (
-    <div style={{ padding: 40, fontFamily: "Arial" }}>
-
-      <h1>MBNotify Web Demo</h1>
-
-      <p>
-        <b>Permission:</b> {permission}
-      </p>
-
-      <p>
-        <b>Device Token:</b>
-      </p>
-
-      <textarea
-        style={{ width: "100%", height: 80 }}
-        value={token}
-        readOnly
-      />
-
-      <br /><br />
-
-      <button onClick={initNotifications}>
-        Request Permission Again
-      </button>
-
-    </div>
-  );
+  return null;
 }
 ```
 
 ---
 
-# Client Functions
-
-## requestPermission()
-
-Requests browser notification permission.
+## 🌐 Web Usage
 
 ```js
-const permission = await requestPermission();
-```
+import { useEffect } from "react";
+import { requestPermission, getToken } from "mbnotify-web";
 
-Returns:
+export default function App() {
 
-```
-"granted"
-"denied"
-"default"
-```
+  useEffect(() => {
+    async function init() {
 
----
+      const permission = await requestPermission();
+      if (permission !== "granted") return;
 
-# getToken(appName)
+      const token = await getToken("myapp");
+      console.log("Device Token:", token);
+    }
 
-Generates a **unique device token** and connects to MQTT broker.
+    init();
+  }, []);
 
-```js
-const token = await getToken("myapp");
-```
-
-Example output:
-
-```
-dev_x8sze8zczlcmmt1s1wm
+  return null;
+}
 ```
 
 ---
 
-# MQTT Topic Structure
+## 🧾 Payload
 
-MBNotify automatically uses this topic:
-
-```
-/{appName}/{deviceToken}/notification
-```
-
-Example
-
-```
-/myapp/dev_x8sze8zczlcmmt1s1wm/notification
-```
-
----
-
-# Default MQTT Broker
-
-By default MBNotify uses **HiveMQ public broker**:
-
-```
-wss://broker.hivemq.com:8884/mqtt
-```
-
-No setup required.
+| Field   | Type   |
+| ------- | ------ |
+| appName | string |
+| token   | string |
+| title   | string |
+| body    | string |
+| icon    | string |
+| image   | string |
+| url     | string |
+| data    | object |
 
 ---
 
-# Notification Click Behavior
+## 🔥 Features
 
-When user clicks notification:
-
-```
-window.open(payload.url)
-```
-
-Example:
-
-```
-https://google.com
-```
+* ⚡ Foreground notifications
+* 📡 MQTT-based communication
+* 🌍 Uses HiveMQ public broker
+* 📱 Works on Web & Mobile
+* 🔗 Supports deep linking via URL
 
 ---
 
-# Example Flow
+## 👨‍💻 Author
 
-1️⃣ User opens website
-2️⃣ `requestPermission()` asks for notification permission
-3️⃣ `getToken("myapp")` generates device token
-4️⃣ Backend sends notification using `sendNotification()`
-5️⃣ Browser receives notification instantly
+**Manoj Gowda B R**
+Full Stack Developer (MERN)
 
 ---
 
-# Browser Support
-
-| Browser | Supported |
-| ------- | --------- |
-| Chrome  | Yes       |
-| Edge    | Yes       |
-| Firefox | Yes       |
-| Safari  | Partial   |
-
----
-
-# License
+## 📜 License
 
 MIT
 
 ---
-
-# Author
-
-**Manoj Gowda B R**
-
-Full Stack Developer
-MERN Stack • JavaScript • Web Systems
-
----
-
-If you want, I can also make a **🔥 professional npm README (much better)** with:
-
-* badges
-* architecture diagram
-* npm install badges
-* GitHub demo GIF
-* React / Next.js / Vanilla examples
-
-That will make **mbnotify look like a serious production package**.

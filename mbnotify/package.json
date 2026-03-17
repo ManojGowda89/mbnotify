@@ -1,6 +1,6 @@
 {
   "name": "mbnotify",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Lightweight MQTT based push notification system",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
