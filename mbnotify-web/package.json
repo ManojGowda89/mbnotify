@@ -1,0 +1,35 @@
+{
+  "name": "mbnotify-web",
+  "version": "1.0.1",
+  "description": "Web client for mbnotify MQTT push notifications",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc -p tsconfig.cjs.json"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "keywords": [
+    "mqtt",
+    "push-notifications",
+    "browser-notifications",
+    "web-push",
+    "mbnotify"
+  ],
+  "author": "Manoj Gowda",
+  "license": "ISC",
+  "dependencies": {
+    "mqtt": "^5.15.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "mbnotify",
+  "version": "2.0.1",
+  "description": "Lightweight MQTT based push notification system",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc -p tsconfig.cjs.json"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "keywords": [
+    "mqtt",
+    "notifications",
+    "push-notification",
+    "expo",
+    "react-native",
+    "web"
+  ],
+  "author": "Manoj Gowda",
+  "license": "ISC",
+  "dependencies": {
+    "mqtt": "^5.15.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

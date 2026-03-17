@@ -1,0 +1,126 @@
+# =========================
+# OS FILES
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# ENV FILES
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# NODE MODULES
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# BUILD OUTPUTS
+# =========================
+dist/
+build/
+.out/
+.next/
+expo-dist/
+web-build/
+
+# =========================
+# CACHE / TEMP
+# =========================
+.cache/
+.temp/
+.tmp/
+coverage/
+*.log
+
+# =========================
+# IDE / EDITOR
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# REACT NATIVE / EXPO
+# =========================
+.expo/
+.expo-shared/
+android/.gradle/
+android/app/build/
+android/build/
+ios/build/
+ios/Pods/
+*.keystore
+*.jks
+
+# Expo specific
+.expo-env
+.expo-settings.json
+
+# =========================
+# METRO / BUNDLER
+# =========================
+.metro-cache/
+
+# =========================
+# ANDROID / IOS
+# =========================
+android/local.properties
+*.iml
+.gradle/
+
+# =========================
+# NODE BACKEND
+# =========================
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# =========================
+# DATABASE
+# =========================
+*.sqlite
+*.db
+
+# =========================
+# TESTING
+# =========================
+jest-cache/
+coverage/
+
+# =========================
+# MISC
+# =========================
+*.tgz
+*.bak
+*.tmp
+
+# =========================
+# TYPESCRIPT
+# =========================
+*.tsbuildinfo
+
+# =========================
+# VERCEL / NETLIFY
+# =========================
+.vercel/
+.netlify/
+
+# =========================
+# DOCKER
+# =========================
+docker-compose.override.yml
+
+# =========================
+# LOG FILES
+# =========================
+logs
+*.log
